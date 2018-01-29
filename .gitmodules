@@ -1,0 +1,12 @@
+[submodule "3rd/logcpp"]
+	path = 3rd/logcpp
+	url = ../logcpp.git
+[submodule "3rd/muradin_basic"]
+	path = 3rd/muradin_basic
+	url = ../muradin_basic.git
+[submodule "3rd/LWS"]
+	path = 3rd/LWS
+	url = ../LWS.git
+[submodule "3rd/snappy"]
+	path = 3rd/snappy
+	url = ../../google/snappy.git
