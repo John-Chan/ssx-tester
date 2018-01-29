@@ -115,22 +115,22 @@ namespace ssx {
 			Seq request_seq(0, chip_b_count + chip_a_count);
 			std::vector<ChipRequestPtr> request_list;
 			for (int di = 0; di < device_handle_list.size(); ++di) {
-				for (int bi = 0; bi < chip_b_count; ++bi) {
+				for (int chip_idx = 0; chip_idx < chip_b_count; ++chip_idx) {
 					ChipRequestPtr cr(new ChipRequest(device_handle_list[di]->getHandle() ));
 					memset(cr->get_buffer(), 0x0, cr->buffer_bytes());
 					ssx::utils::decode_hex(packet_template_chip_b_0x43, cr->get_buffer(), cr->buffer_bytes());
-					cr->get_buffer()[0] = (unsigned char)di;
-					cr->get_buffer()[2] = (unsigned char)bi;
+					//cr->get_buffer()[0] = (unsigned char)di;
+					cr->get_buffer()[2] = (unsigned char)chip_idx;
 					request_list.push_back(cr);
 				}
 			}
 			for (int di = 0; di < device_handle_list.size(); ++di) {
-				for (int ai = 0; ai < chip_a_count; ++ai) {
+				for (int chip_idx = 0; chip_idx < chip_a_count; ++chip_idx) {
 					ChipRequestPtr cr(new ChipRequest(device_handle_list[di]->getHandle()));
 					memset(cr->get_buffer(), 0x0, cr->buffer_bytes());
 					ssx::utils::decode_hex(packet_template_chip_a_0x54, cr->get_buffer(), cr->buffer_bytes());
-					cr->get_buffer()[0] = (unsigned char)di;
-					cr->get_buffer()[2] = (unsigned char)ai;
+					//cr->get_buffer()[0] = (unsigned char)di;
+					cr->get_buffer()[2] = (unsigned char)chip_idx;
 					request_list.push_back(cr);
 				}
 			}
@@ -225,7 +225,7 @@ namespace ssx {
 				}
 
 				count++;
-				if (count % 1000) {
+				if ( (count % 1000) == 0) {
 					BOOST_LOG_TRIVIAL(info) << "²âÊÔÍ¨¹ý"<< count<<"´Î";
 				}
 				// FIXME: CRC CHECK
