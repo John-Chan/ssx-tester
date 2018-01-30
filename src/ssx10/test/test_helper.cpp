@@ -42,7 +42,7 @@ namespace ssx {
 			for (int i = 0; i < request_list.size();++i) {
 				ChipRequestPtr r = request_list[i];
 				int msg_len = (r->get_buffer()[5]) + 8;
-				BOOST_LOG_TRIVIAL(info)<< title<<"  " << ssx::utils::encode_hex(r->get_buffer(), msg_len, true);
+				BOOST_LOG_TRIVIAL(info)<< title<<" "<< (i+1)<< " : " << ssx::utils::encode_hex(r->get_buffer(), msg_len, true);
 			}
 		}
 	}
