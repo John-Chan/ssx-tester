@@ -89,7 +89,7 @@ namespace ssx {
 				if (dynamic_req || seq == -1) {
 					seq = request_seq.next();
 				}
-				BOOST_LOG_TRIVIAL(debug) << " 请求编号 :" << seq;
+				BOOST_LOG_TRIVIAL(debug) << " 使用请求编号 :" << seq;
 				ChipRequestPtr request = request_list[seq];
 
 				unsigned char data[IO_BUFF_SIZE];
@@ -115,7 +115,7 @@ namespace ssx {
 
 				count++;
 				if ((count % 1000) == 0) {
-					BOOST_LOG_TRIVIAL(info) << "测试通过" << count << "次";
+					BOOST_LOG_TRIVIAL(info) << "当前线程测试通过" << count << "次";
 				}
 			}
 		}
