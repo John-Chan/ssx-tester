@@ -135,7 +135,7 @@ namespace ssx {
 			int exchange_data(HANDLE fd, void* buffer, size_t buffer_size) {
 				return DeviceExecute(fd,(unsigned char*) buffer,buffer_size);
 			}
-			int exchange_data(HANDLE fd, const void* buffer, size_t buffer_size, unsigned int timeout_ms) {
+			int exchange_data(HANDLE fd, void* buffer, size_t buffer_size, unsigned int timeout_ms) {
 				return DeviceExecuteV2(fd, (unsigned char*)buffer, buffer_size, timeout_ms);
 			}
 		}

@@ -13,10 +13,6 @@
 	see cmake-generaters.txt
 
 
-install headers:
-run [path_to_project]\cmake\build\extract_includes.bat
-you will see a 'include' directory
-
 ============================================================================
 set boost library path manually
 
