@@ -101,7 +101,6 @@ namespace ssx {
 				int io_bytes = ssx::io::win32::exchange_data(request->get_handle(), data, IO_BUFF_SIZE);
 #endif
 
-
 				const  int MIN_RESPONSE_BYTES = 9;
 				if (io_bytes <= 0) {
 					BOOST_LOG_TRIVIAL(error) << "io´íÎó,write·µ»Ø×Ö½Ú: " << io_bytes;
@@ -111,7 +110,6 @@ namespace ssx {
 				if (!check_response_data(request->get_buffer(), data, io_bytes)) {
 					break;
 				}
-
 
 				count++;
 				if ((count % 1000) == 0) {

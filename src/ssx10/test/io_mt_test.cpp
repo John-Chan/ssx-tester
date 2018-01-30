@@ -123,35 +123,22 @@ namespace ssx {
 				}
 				BOOST_LOG_TRIVIAL(debug)  << " 使用请求编号 :"<< seq;
 				ChipRequestPtr request = request_list[seq];
-
-				{
-					boost::unique_lock<boost::mutex> lock(request->get_mutex());
-					while (!request->io_ready()  ) {
-						//BOOST_LOG_TRIVIAL(debug) << "wait io ready";
-						if (request->io_condition().timed_wait(lock, boost::posix_time::milliseconds(1000))) {
-							request->io_ready() = false;
-						}
-						if (stop_flag) {break;}
-					}
-				}
-
-				if (stop_flag) {
-					break;
-				}
+				int io_bytes = -1;
 				unsigned char data[IO_BUFF_SIZE];
-				memcpy(data, request->get_buffer(), request->buffer_bytes());
-				//BOOST_LOG_TRIVIAL(debug)  << "start write ";
-#if (IO_WITH_TIMEOUT)
-				int io_bytes = ssx::io::win32::exchange_data(request->get_handle(), data, IO_BUFF_SIZE,2000);
-#else
-				int io_bytes = ssx::io::win32::exchange_data(request->get_handle(), data, IO_BUFF_SIZE);
-#endif
 				
 				{
 					boost::unique_lock<boost::mutex> lock(request->get_mutex());
-					request->io_ready() = true;
-					request->io_condition().notify_all();
+					memcpy(data, request->get_buffer(), request->buffer_bytes());
+					//BOOST_LOG_TRIVIAL(debug)  << "start write ";
+#if (IO_WITH_TIMEOUT)
+					io_bytes = ssx::io::win32::exchange_data(request->get_handle(), data, IO_BUFF_SIZE, 2000);
+#else
+					io_bytes = ssx::io::win32::exchange_data(request->get_handle(), data, IO_BUFF_SIZE);
+#endif
 				}
+
+			
+				
 
 				if (io_bytes <= 0) {
 					BOOST_LOG_TRIVIAL(error) << "io错误,write返回字节: " << io_bytes ;

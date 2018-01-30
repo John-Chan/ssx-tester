@@ -20,22 +20,24 @@ namespace ssx {
 		class ChipRequest {
 		private:
 			boost::mutex mutex_;
-			boost::condition_variable io_condition_;
+			//boost::condition_variable io_condition_;
 			unsigned char buffer_[IO_BUFF_SIZE];
 			HANDLE fd_;
-			boost::atomic_bool io_ready_;
+			//boost::atomic_bool io_ready_;
 		public:
 			ChipRequest(HANDLE handle)
-				:fd_(handle), io_ready_(true) {
+				:fd_(handle)/*, io_ready_(true) */{
 
 			}
 			unsigned char* get_buffer() { return buffer_; }
 			boost::mutex& get_mutex() { return mutex_; }
 			size_t buffer_bytes() { return sizeof(buffer_); }
+			/*
 			boost::atomic_bool& io_ready() { return io_ready_; }
 			boost::condition_variable& io_condition() {
 				return io_condition_;
 			}
+			*/
 			HANDLE get_handle() { return fd_; }
 		};
 
