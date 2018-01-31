@@ -42,8 +42,9 @@ namespace ssx {
 			}
 			int ret_code = rep_data[6];
 			if (ret_code != 0) {
+				// not a hard error
 				BOOST_LOG_TRIVIAL(error) << "芯片已经应答请求,但返回错误 "<< ret_code <<",请求:" << req_hex << ".响应:" << rsp_hex;
-				return false;
+				//return false;
 			}
 			return true;
 		}
