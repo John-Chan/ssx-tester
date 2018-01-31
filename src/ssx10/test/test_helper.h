@@ -9,6 +9,7 @@
 
 #include "../io/win32/ssx_io.h"
 
+#define IO_WITH_TIMEOUT 1
 namespace ssx {
 	namespace testing {
 
@@ -73,6 +74,7 @@ namespace ssx {
 
 		bool check_response_data(const void* req_buffer,const void* rep_buffer, unsigned int rep_bytes);
 		void print_test_samples(const std::string& title,const std::vector<ChipRequestPtr>& request_list);
+		int make_crc(const void* ptr, unsigned int offset, unsigned int length);
 	}
 }
 

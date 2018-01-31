@@ -33,7 +33,18 @@ namespace ssx {
 				BOOST_LOG_TRIVIAL(error) << "协议错误,报文体实际长度与write返回字节不匹配,io_bytes = " << rep_bytes << ", msg_bytes =" << msg_bytes << ".请求:" << req_hex << ".响应:" << rsp_hex;
 				return false;
 			}
-			// FIXME: CRC CHECK
+			
+			int except_crc = make_crc(rep_data,4, msg_bytes - 6);
+			int crc = *((unsigned short*)(rep_data + msg_bytes - 2)); // FIXME: only works on little endian platform
+			if (crc != except_crc) {
+				BOOST_LOG_TRIVIAL(error) << "协议错误,响应报文的CRC错误,请求:" << req_hex << ".响应:" << rsp_hex;
+				return false;
+			}
+			int ret_code = rep_data[6];
+			if (ret_code != 0) {
+				BOOST_LOG_TRIVIAL(error) << "芯片已经应答请求,但返回错误 "<< ret_code <<",请求:" << req_hex << ".响应:" << rsp_hex;
+				return false;
+			}
 			return true;
 		}
 
@@ -45,5 +56,20 @@ namespace ssx {
 				BOOST_LOG_TRIVIAL(info)<< title<<" "<< (i+1)<< " : " << ssx::utils::encode_hex(r->get_buffer(), msg_len, true);
 			}
 		}
+
+		int make_crc(const void* ptr,unsigned int offset,unsigned int length) {
+			const unsigned char* src = (const unsigned char*)ptr;
+			int s1 = 0, s2 = 0;
+			int p1 = 0, p2 = 0;
+			for (int i = 0; i < length; ++i) {
+				s2 = 0xFFFF & (s1 + (0xFF & src[i + offset]));
+				p2 = 0xFFFF & (p1 + s2);
+				s1 = s2;
+				p1 = p2;
+			}
+			// FIXME: it little endian
+			return p2 & 0xFFFF; // as unsigned short
+		}
+
 	}
 }

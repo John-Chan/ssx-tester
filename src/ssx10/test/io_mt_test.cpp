@@ -13,7 +13,6 @@
 #include "../utils/hex.h"
 #include "test_helper.h"
 
-#define IO_WITH_TIMEOUT 0
 
 namespace ssx {
 	namespace testing {
@@ -35,9 +34,13 @@ namespace ssx {
 			std::cout << " ================================================================= " << std::endl;
 		}
 		void run_io_mt_test(unsigned int seconds,int thread_size,bool dynamic_req) {
-
-			BOOST_LOG_TRIVIAL(info) << "准备测试, second = "<< seconds <<",threads = "<< thread_size<< ",dynamic_req = "<< (dynamic_req?"Y":"N" );
 			
+			BOOST_LOG_TRIVIAL(info) << "准备测试, second = "<< seconds <<",threads = "<< thread_size<< ",dynamic_req = "<< (dynamic_req?"Y":"N" );
+#if (IO_WITH_TIMEOUT)
+			BOOST_LOG_TRIVIAL(info) << "IO 模型:阻塞+超时";
+#else
+			BOOST_LOG_TRIVIAL(info) << "IO 模型:阻塞";
+#endif
 
 			std::vector<std::string> device_path_list = ssx::io::win32::search_ssx_devices(0, 4);
 			std::vector<HandleWrapperPtr> device_handle_list;
